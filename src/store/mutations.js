@@ -13,4 +13,4 @@ export default {
   [types.API_FAILURE](state, { errors }) {
     state.errors = errors;
   },
-}
+};

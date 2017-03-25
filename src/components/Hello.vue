@@ -37,7 +37,6 @@ export default {
   async created() {
     try {
       const result = await axios.get('https://artsound-development.romcloud.be/v1/system/status');
-      console.log(result);
       this.result = result.data;
     } catch (e) {
       this.errors.push(e);

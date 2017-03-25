@@ -7,7 +7,7 @@ const vaultEndpoint = 'http://10.211.55.17/v1';
 export const login = async ({ commit }, { username, password }) => {
   try {
     const loginResponse = await axios.post(`${vaultEndpoint}/auth/userpass/login/${username}`, {
-      password: password,
+      password,
     });
 
     commit(types.AUTH_SUCCESS, loginResponse);
@@ -26,4 +26,4 @@ export const getSealStatus = async ({ commit }) => {
     // TODO unpacken van errors van API generic maken
     commit(types.API_FAILURE, e.response.data);
   }
-}
+};
