@@ -2,42 +2,57 @@
 <md-layout md-gutter md-row>
   <md-layout md-flex="33" md-flex-offset="33">
     <!-- TODO die vault.png naar een juiste plaats zetten -->
-    <img class="logo" src="../assets/vault.png">
-    {{ test }}
+    <img class="logo" src="../assets/vault.svg">
   </md-layout>
 
   <md-layout md-flex="33" md-flex-offset="33">
+    <div class="warning" v-if="sealed">
+      Warning: Vault sealed
+    </div>
+  </md-layout>
+
+  <md-layout md-flex="33" md-flex-offset="33">
+    <div v-for="error in errors">
+      {{ error }}
+    </div>
     <md-input-container>
       <label>Username</label>
       <md-input v-model="username"></md-input>
     </md-input-container>
     <md-input-container>
-      <label>Regular Password</label>
-      <md-input type="password"></md-input>
+      <label>Password</label>
+      <md-input type="password" v-model="password"></md-input>
     </md-input-container>
 
-    <md-button @click.native="login" class="md-raised md-primary">Login</md-button>
+    <md-button @click.native="login({ username, password })" class="md-raised md-primary">Login</md-button>
   </md-layout>
 </md-layout>
 </template>
 
 
 <script>
-// import axios from 'axios';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data() {
     return {
       username: '',
       password: '',
-      test: '',
     };
   },
+  computed: {
+    ...mapGetters([
+      'errors',
+      'sealed',
+    ]),
+  },
+  created() {
+    this.$store.dispatch('getSealStatus');
+  },
   methods: {
-    login() {
-      console.log('test');
-      this.test = 'test';
-    },
+    ...mapActions([
+      'login',
+    ]),
   },
 };
 </script>
@@ -46,9 +61,5 @@ export default {
 <style scoped>
 .logo {
   height: 100px;
-}
-
-md-layout {
-  margin: auto;
 }
 </style>

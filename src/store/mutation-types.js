@@ -1,0 +1,3 @@
+export const AUTH_SUCCESS = 'AUTH_SUCCESS';
+export const API_FAILURE = 'API_FAILURE';
+export const SEAL_STATUS_SUCCESS = 'SEAL_STATUS_SUCCESS';

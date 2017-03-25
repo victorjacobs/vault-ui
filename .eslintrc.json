@@ -1,0 +1,11 @@
+{
+    "rules": {
+        "no-param-reassign": [2, { 
+            "props": true,
+            "ignorePropertyModificationsFor": [
+                "state"
+            ]
+        }]
+    },
+    "extends": "eslint-config-airbnb"
+}
