@@ -32,13 +32,31 @@ export const getMounts = async ({ commit }) => {
   try {
     const mountsResponse = await axios.get('/sys/mounts');
 
+    console.log(mountsResponse.data);
+
     commit(types.MOUNTS_SUCCESS, mountsResponse);
   } catch (e) {
     commit(types.API_FAILURE, e.response.data);
   }
 };
 
-export const loginFromLocalStorage = async ({ commit }, lsAuth) => {
+export const listMount = async ({ commit }, path) => {
+  try {
+    const listMountResponse = await axios.request({
+      url: path,
+      method: 'list',
+    });
+
+    commit(types.LIST_MOUNT_SUCCESS, {
+      mount: path,
+      keys: listMountResponse.data.data.keys,
+    });
+  } catch (e) {
+    commit(types.API_FAILURE, e.response.data);
+  }
+};
+
+export const loginFromLocalStorage = ({ commit }, lsAuth) => {
   const auth = JSON.parse(lsAuth);
   commit(types.AUTH_SUCCESS, auth);
 };

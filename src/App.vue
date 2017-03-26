@@ -1,15 +1,27 @@
 <template>
-  <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
-    <router-view></router-view>
+  <div>
+    <img class="logo" src="./assets/vault.svg">
+    <div id="app">
+      <div class="warning" v-if="sealed">
+        Warning: Vault sealed
+      </div>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'app',
   created() {
     this.$store.dispatch('getSealStatus');
+  },
+  computed: {
+    ...mapGetters([
+      'sealed',
+    ]),
   },
 };
 </script>
@@ -19,8 +31,15 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /*text-align: center;*/
   color: #2c3e50;
   margin-top: 60px;
+  margin-left: 60px;
+}
+
+.logo {
+  height: 100px;
+  margin-left: 20px;
+  margin-top: 20px;
 }
 </style>

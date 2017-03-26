@@ -12,7 +12,7 @@ const state = {
   sealStatus: {},
   auth: {},
   errors: [],
-  mounts: [],
+  mounts: {},
 };
 
 const store = new Vuex.Store({

@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import * as types from './mutation-types';
 
 export default {
@@ -14,7 +15,9 @@ export default {
     state.errors = errors;
   },
 
-  [types.MOUNTS_SUCCESS](state, { data }) {
-    state.mounts = data;
+  [types.LIST_MOUNT_SUCCESS](state, { mount, keys }) {
+    Vue.set(state.mounts, mount, {
+      keys,
+    });
   },
 };
