@@ -34,6 +34,7 @@
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
+  name: 'login',
   data() {
     return {
       username: '',
@@ -45,9 +46,6 @@ export default {
       'errors',
       'sealed',
     ]),
-  },
-  created() {
-    this.$store.dispatch('getSealStatus');
   },
   methods: {
     ...mapActions([

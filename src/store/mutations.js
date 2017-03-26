@@ -1,9 +1,9 @@
 import * as types from './mutation-types';
 
 export default {
-  [types.AUTH_SUCCESS](state, { data }) {
+  [types.AUTH_SUCCESS](state, auth) {
     state.errors = [];
-    state.auth = data.auth;
+    state.auth = auth;
   },
 
   [types.SEAL_STATUS_SUCCESS](state, { data }) {
@@ -12,5 +12,9 @@ export default {
 
   [types.API_FAILURE](state, { errors }) {
     state.errors = errors;
+  },
+
+  [types.MOUNTS_SUCCESS](state, { data }) {
+    state.mounts = data;
   },
 };

@@ -8,6 +8,9 @@
 <script>
 export default {
   name: 'app',
+  created() {
+    this.$store.dispatch('getSealStatus');
+  },
 };
 </script>
 
