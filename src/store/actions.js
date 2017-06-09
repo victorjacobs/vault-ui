@@ -2,6 +2,26 @@ import axios from 'axios';
 import router from '@/router';
 import * as types from './mutation-types';
 
+const commitApiError = (commit, e) => {
+  // If we get a code in e, it is an connection error from Axios
+  if (e.code !== undefined) {
+    if (e.code === 'ECONNABORTED') {
+      commit(types.API_FAILURE, {
+        errors: [
+          'Vault not responding',
+        ],
+      });
+    }
+  } else {
+    console.dir(e);
+    if (e.response.status === 403) {
+      router.push({ name: 'login' });
+    } else {
+      commit(types.API_FAILURE, e.response.data);
+    }
+  }
+};
+
 export const login = async ({ commit }, { username, password }) => {
   try {
     const loginResponse = await axios.post(`/auth/userpass/login/${username}`, {
@@ -12,8 +32,7 @@ export const login = async ({ commit }, { username, password }) => {
 
     router.push({ name: 'home' });
   } catch (e) {
-    // TODO unpacken van errors van API generic maken
-    commit(types.API_FAILURE, e.response.data);
+    commitApiError(commit, e);
   }
 };
 
@@ -23,8 +42,7 @@ export const getSealStatus = async ({ commit }) => {
 
     commit(types.SEAL_STATUS_SUCCESS, sealStatusResponse);
   } catch (e) {
-    // TODO unpacken van errors van API generic maken
-    commit(types.API_FAILURE, e.response.data);
+    commitApiError(commit, e);
   }
 };
 
@@ -36,7 +54,7 @@ export const getMounts = async ({ commit }) => {
 
     commit(types.MOUNTS_SUCCESS, mountsResponse);
   } catch (e) {
-    commit(types.API_FAILURE, e.response.data);
+    commitApiError(commit, e);
   }
 };
 
@@ -52,7 +70,7 @@ export const listMount = async ({ commit }, path) => {
       keys: listMountResponse.data.data.keys,
     });
   } catch (e) {
-    commit(types.API_FAILURE, e.response.data);
+    commitApiError(commit, e);
   }
 };
 
