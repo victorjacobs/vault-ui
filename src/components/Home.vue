@@ -3,16 +3,16 @@
     <EditSecretDialog
       ref="editSecretDialog" />
 
-    <div v-for="(mount, mountName) in mounts" :key="mountName" md-flex="60">
+    <div v-for="mount in mounts" md-flex="60">
       <h1>
-        {{ mountName }}
+        {{ mount }}
         <a href="#" @click="openEditDialog()">
           <md-icon>add</md-icon>
         </a>
       </h1>
       <ul>
-        <li v-for="key in mount.keys">
-          <a @click="openEditDialog(mountName, key)">
+        <li v-for="key in keys(mount)">
+          <a @click="openEditDialog(mount, key)">
             {{ key }}
           </a>
         </li>
@@ -41,6 +41,7 @@ export default {
   computed: {
     ...mapGetters([
       'mounts',
+      'keys',
     ]),
   },
   methods: {

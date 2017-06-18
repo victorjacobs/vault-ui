@@ -16,8 +16,14 @@ export default {
   },
 
   [types.LIST_MOUNT_SUCCESS](state, { mount, keys }) {
-    Vue.set(state.mounts, mount, {
-      keys,
+    Vue.set(state.mounts, mount, {});
+
+    keys.forEach((key) => {
+      Vue.set(state.mounts[mount], key, {});
     });
+  },
+
+  [types.GET_SECRET_SUCCESS](state, { mount, key, data }) {
+    state.mounts[mount][key] = data;
   },
 };

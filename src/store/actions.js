@@ -74,6 +74,20 @@ export const listMount = async ({ commit }, path) => {
   }
 };
 
+export const getSecret = async ({ commit }, { mount, key }) => {
+  try {
+    const secretGetResult = await axios.get(`${mount}/${key}`);
+
+    commit(types.GET_SECRET_SUCCESS, {
+      mount,
+      key,
+      data: secretGetResult.data.data,
+    });
+  } catch (e) {
+    commitApiError(commit, e);
+  }
+};
+
 export const loginFromLocalStorage = ({ commit }, lsAuth) => {
   const auth = JSON.parse(lsAuth);
   commit(types.AUTH_SUCCESS, auth);
