@@ -9,11 +9,11 @@
       </md-input-container>
       <md-input-container class="input">
         <label>Username</label>
-        <md-input v-model="secret.username"></md-input>
+        <md-input :value="secret.username" @input="updateSecret('username', $event)"></md-input>
       </md-input-container>
       <md-input-container class="input">
         <label>Password</label>
-        <md-input v-model="secret.password"></md-input>
+        <md-input :value="secret.password" @input="updateSecret('password', $event)"></md-input>
       </md-input-container>
     </md-dialog-content>
 
@@ -25,33 +25,52 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
+import * as types from '@/store/mutation-types';
 
 export default {
   data: () => ({
-    secret: {},
     mount: null,
     key: null,
+    secret: {},
   }),
   methods: {
     async open(mount, key) {
       this.mount = mount;
       this.key = key;
+
       if (mount !== undefined) {
-        await this.getSecret({ mount, key });
-        this.secret = this.secretFromState(this.mount, this.key);
+        await this.getSecretFromAPI();
       }
+
+      this.secret = this.secretFromState(this.mount, this.key);
 
       this.$refs.dialog.open();
     },
     close() {
       this.$refs.dialog.close();
+      // Rollback potential updates that weren't saved
+      this.getSecretFromAPI();
     },
-    saveSecret() {
-      console.log(this.username);
+    updateSecret(property, value) {
+      this.updateSecretInState({
+        mount: this.mount,
+        key: this.key,
+        property,
+        value,
+      });
     },
+    getSecretFromAPI() {
+      return this.getSecret({
+        mount: this.mount,
+        key: this.key,
+      });
+    },
+    ...mapMutations({
+      updateSecretInState: types.UPDATE_SECRET,
+    }),
     ...mapActions([
-      // 'saveSecret',
+      'saveSecret',
       'getSecret',
     ]),
   },

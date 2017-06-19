@@ -7,7 +7,7 @@ export default {
     state.auth = auth;
   },
 
-  [types.SEAL_STATUS_SUCCESS](state, { data }) {
+  [types.UPDATE_SEAL](state, { data }) {
     state.sealStatus = data;
   },
 
@@ -15,7 +15,7 @@ export default {
     state.errors = errors;
   },
 
-  [types.LIST_MOUNT_SUCCESS](state, { mount, keys }) {
+  [types.SET_MOUNTS](state, { mount, keys }) {
     Vue.set(state.mounts, mount, {});
 
     keys.forEach((key) => {
@@ -23,7 +23,15 @@ export default {
     });
   },
 
-  [types.GET_SECRET_SUCCESS](state, { mount, key, data }) {
+  [types.SET_SECRET](state, { mount, key, data }) {
     state.mounts[mount][key] = data;
+  },
+
+  [types.UPDATE_SECRET](state, { mount, key, property, value }) {
+    const secret = state.mounts[mount][key];
+    if (secret === undefined) {
+      Vue.set(state.mounts[mount], key, {});
+    }
+    secret[property] = value;
   },
 };

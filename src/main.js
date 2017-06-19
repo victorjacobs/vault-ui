@@ -11,7 +11,7 @@ import store from './store';
 
 Vue.config.productionTip = false;
 
-axios.defaults.baseURL = 'http://10.211.55.17/v1';
+axios.defaults.baseURL = process.env.VAULT_URL;
 axios.defaults.timeout = 2000;
 
 Vue.use(VueMaterial);

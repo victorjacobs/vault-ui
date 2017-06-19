@@ -12,13 +12,10 @@ const commitApiError = (commit, e) => {
         ],
       });
     }
+  } else if (e.response.status === 403) {
+    router.push({ name: 'login' });
   } else {
-    console.dir(e);
-    if (e.response.status === 403) {
-      router.push({ name: 'login' });
-    } else {
-      commit(types.API_FAILURE, e.response.data);
-    }
+    commit(types.API_FAILURE, e.response.data);
   }
 };
 
@@ -40,7 +37,7 @@ export const getSealStatus = async ({ commit }) => {
   try {
     const sealStatusResponse = await axios.get('/sys/seal-status');
 
-    commit(types.SEAL_STATUS_SUCCESS, sealStatusResponse);
+    commit(types.UPDATE_SEAL, sealStatusResponse);
   } catch (e) {
     commitApiError(commit, e);
   }
@@ -49,8 +46,6 @@ export const getSealStatus = async ({ commit }) => {
 export const getMounts = async ({ commit }) => {
   try {
     const mountsResponse = await axios.get('/sys/mounts');
-
-    console.log(mountsResponse.data);
 
     commit(types.MOUNTS_SUCCESS, mountsResponse);
   } catch (e) {
@@ -65,7 +60,7 @@ export const listMount = async ({ commit }, path) => {
       method: 'list',
     });
 
-    commit(types.LIST_MOUNT_SUCCESS, {
+    commit(types.SET_MOUNTS, {
       mount: path,
       keys: listMountResponse.data.data.keys,
     });
@@ -78,11 +73,21 @@ export const getSecret = async ({ commit }, { mount, key }) => {
   try {
     const secretGetResult = await axios.get(`${mount}/${key}`);
 
-    commit(types.GET_SECRET_SUCCESS, {
+    commit(types.SET_SECRET, {
       mount,
       key,
       data: secretGetResult.data.data,
     });
+  } catch (e) {
+    commitApiError(commit, e);
+  }
+};
+
+export const saveSecret = async ({ commit }, { mount, key, data }) => {
+  try {
+    await axios.put(`${mount}/${key}`, data);
+
+    commit(types.SAVE_SECRET_SUCCESS);
   } catch (e) {
     commitApiError(commit, e);
   }
