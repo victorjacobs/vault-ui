@@ -1,7 +1,6 @@
 <template>
   <div>
-    <EditSecretDialog
-      ref="editSecretDialog" />
+    <EditSecretDialog ref="editSecretDialog" />
 
     <div v-for="mount in mounts" md-flex="60">
       <h1>

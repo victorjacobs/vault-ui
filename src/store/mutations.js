@@ -12,7 +12,10 @@ export default {
   },
 
   [types.API_FAILURE](state, { errors }) {
-    state.errors = errors;
+    state.errors = errors.filter(error =>
+      // This handled in the VaultInfo component
+      error !== 'Vault is sealed',
+    );
   },
 
   [types.SET_MOUNTS](state, { mount, keys }) {

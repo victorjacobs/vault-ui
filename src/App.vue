@@ -1,6 +1,7 @@
 <template>
   <div>
     <img class="logo" src="./assets/vault.svg">
+
     <div id="app">
       <div class="alert alert-error" v-if="errors">
         <ul>
@@ -9,25 +10,25 @@
           </li>
         </ul>
       </div>
-      <div class="warning" v-if="sealed">
-        Warning: Vault sealed
-      </div>
+
       <router-view></router-view>
+
+      <VaultInfo />
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import VaultInfo from '@/components/VaultInfo';
 
 export default {
   name: 'app',
-  created() {
-    this.$store.dispatch('getSealStatus');
+  components: {
+    VaultInfo,
   },
   computed: {
     ...mapGetters([
-      'sealed',
       'errors',
     ]),
   },
