@@ -13,7 +13,7 @@ const commitApiError = (commit, e) => {
       });
     }
   } else if (e.response.status === 403) {
-    router.push({ name: 'login' });
+    router.push('login');
   } else {
     commit(types.API_FAILURE, e.response.data);
   }
@@ -44,12 +44,31 @@ export const getSealStatus = async ({ commit }) => {
 };
 
 // TODO be consistent in where we parse API responses, either here or mutation but not both
-
 export const getMounts = async ({ commit }) => {
   try {
     const mountsResponse = await axios.get('/sys/mounts');
 
-    commit(types.SET_MOUNTS, mountsResponse);
+    const promises = [];
+    const mounts = [];
+
+    // Now filter the mounts based on read capability
+    Object.entries(mountsResponse.data).forEach((property) => {
+      const propertyName = property[0];
+      const propertyValue = property[1];
+      if (propertyName.includes('/') && propertyValue.type === 'generic') {
+        promises.push(axios.post('/sys/capabilities-self', {
+          path: propertyName,
+        }).then((response) => {
+          if (response.data.capabilities.includes('read')) {
+            mounts.push(propertyName.replace('/', ''));
+          }
+        }));
+      }
+    });
+
+    await Promise.all(promises);
+
+    commit(types.SET_MOUNTS, mounts);
   } catch (e) {
     commitApiError(commit, e);
   }

@@ -29,7 +29,7 @@ export default {
   name: 'home',
   components: { EditSecretDialog },
   async created() {
-    if (!this.$store.state.auth) {
+    if (!this.auth) {
       router.push('login');
     }
 
@@ -42,6 +42,7 @@ export default {
     ...mapGetters([
       'mounts',
       'keys',
+      'auth',
     ]),
   },
   methods: {

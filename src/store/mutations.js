@@ -18,15 +18,11 @@ export default {
     );
   },
 
-  [types.SET_MOUNTS](state, { data }) {
+  [types.SET_MOUNTS](state, mounts) {
     Vue.set(state, 'mounts', {});
 
-    Object.entries(data).forEach((property) => {
-      const propertyName = property[0];
-      const propertyValue = property[1];
-      if (propertyName.includes('/') && propertyValue.type === 'generic') {
-        Vue.set(state.mounts, propertyName.replace('/', ''), {});
-      }
+    mounts.forEach((mountName) => {
+      Vue.set(state.mounts, mountName, {});
     });
   },
 

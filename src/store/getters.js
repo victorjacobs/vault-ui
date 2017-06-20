@@ -1,3 +1,5 @@
+export const auth = state => state.auth;
+
 export const vaultVersion = state => state.sealStatus.version;
 
 export const vaultSealed = state => state.sealStatus.sealed;

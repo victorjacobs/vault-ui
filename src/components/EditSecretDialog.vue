@@ -43,16 +43,17 @@ export default {
 
       if (key !== undefined) {
         await this.getSecretFromAPI();
+        this.secret = this.secretFromState(this.mount, this.key);
       }
-
-      this.secret = this.secretFromState(this.mount, this.key);
 
       this.$refs.dialog.open();
     },
     close() {
       this.$refs.dialog.close();
       // Rollback potential updates that weren't saved
-      this.getSecretFromAPI();
+      if (!this.createMode) {
+        this.getSecretFromAPI();
+      }
     },
     updateSecret(property, value) {
       this.updateSecretInState({
