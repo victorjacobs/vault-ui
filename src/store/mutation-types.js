@@ -9,5 +9,8 @@ export const SET_MOUNTS = 'SET_MOUNTS';
 
 export const SET_SECRET = 'SET_SECRET';
 export const UPDATE_SECRET = 'UPDATE_SECRET';
+export const DELETE_SECRET = 'DELETE_SECRET';
+
+export const SET_CAPABILITIES = 'SET_CAPABILITIES';
 
 export const SAVE_SECRET_SUCCESS = 'SAVE_SECRET_SUCCESS';

@@ -12,7 +12,7 @@ const commitApiError = (commit, e) => {
         ],
       });
     }
-  } else if (e.response.status === 403) {
+  } else if (e.response && e.response.status === 403) {
     router.push('login');
   } else {
     commit(types.API_FAILURE, e.response.data);
@@ -59,8 +59,14 @@ export const getMounts = async ({ commit }) => {
         promises.push(axios.post('/sys/capabilities-self', {
           path: propertyName,
         }).then((response) => {
+          // Only add mount and store capabilities when it is at least readable
           if (response.data.capabilities.includes('read')) {
-            mounts.push(propertyName.replace('/', ''));
+            const mountName = propertyName.replace('/', '');
+            mounts.push(mountName);
+            commit(types.SET_CAPABILITIES, {
+              mount: mountName,
+              capabilities: response.data.capabilities,
+            });
           }
         }));
       }
@@ -104,11 +110,21 @@ export const getSecret = async ({ commit }, { mount, key }) => {
   }
 };
 
-export const saveSecret = async ({ commit }, { mount, key, data }) => {
+export const saveSecret = async ({ commit, getters }, { mount, key }) => {
   try {
-    await axios.put(`${mount}/${key}`, data);
+    await axios.put(`${mount}/${key}`, getters.secret(mount, key));
 
     commit(types.SAVE_SECRET_SUCCESS);
+  } catch (e) {
+    commitApiError(commit, e);
+  }
+};
+
+export const deleteSecret = async ({ commit }, { mount, key }) => {
+  try {
+    await axios.delete(`${mount}/${key}`);
+
+    commit(types.DELETE_SECRET, { mount, key });
   } catch (e) {
     commitApiError(commit, e);
   }

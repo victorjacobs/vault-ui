@@ -13,6 +13,7 @@ const state = {
   auth: {},
   errors: [],
   mounts: {},
+  capabilities: {},
 };
 
 const store = new Vuex.Store({

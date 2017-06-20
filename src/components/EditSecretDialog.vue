@@ -2,24 +2,25 @@
   <md-dialog ref='dialog'>
     <md-dialog-title>{{ mount }}</md-dialog-title>
 
-    <md-dialog-content>
+    <md-dialog-content id='dialog'>
       <md-input-container class="input">
         <label>Key</label>
-        <md-input v-model="key"></md-input>
+        <md-input v-model="key" :disabled="!createMode"></md-input>
       </md-input-container>
       <md-input-container class="input">
         <label>Username</label>
-        <md-input :value="secret.username" @input="updateSecret('username', $event)"></md-input>
+        <md-input :value="secret.username" @input="updateSecret('username', $event)" :disabled="!canUpdateOn(mount)"></md-input>
       </md-input-container>
       <md-input-container class="input">
         <label>Password</label>
-        <md-input :value="secret.password" @input="updateSecret('password', $event)"></md-input>
+        <md-input :value="secret.password" @input="updateSecret('password', $event)" :disabled="!canUpdateOn(mount)"></md-input>
       </md-input-container>
     </md-dialog-content>
 
     <md-dialog-actions>
       <md-button class="md-primary" @click.native="close()">Cancel</md-button>
-      <md-button class="md-primary" @click.native="saveSecret()">Save</md-button>
+      <md-button class="md-warn" v-if="canDeleteOn(mount)">Delete</md-button>
+      <md-button class="md-primary" v-if="canUpdateOn(mount)" @click.native="save()">Save</md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>
@@ -55,6 +56,13 @@ export default {
         this.getSecretFromAPI();
       }
     },
+    save() {
+      this.saveSecret({
+        mount: this.mount,
+        key: this.key,
+      });
+      this.close();
+    },
     updateSecret(property, value) {
       this.updateSecretInState({
         mount: this.mount,
@@ -79,6 +87,8 @@ export default {
   },
   computed: {
     ...mapGetters({
+      canDeleteOn: 'canDeleteOn',
+      canUpdateOn: 'canUpdateOn',
       secretFromState: 'secret',
     }),
   },
@@ -86,5 +96,7 @@ export default {
 </script>
 
 <style scoped>
-
+#dialog {
+  width: 600px;
+}
 </style>

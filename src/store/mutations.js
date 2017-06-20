@@ -45,4 +45,12 @@ export default {
     }
     secret[property] = value;
   },
+
+  [types.SET_CAPABILITIES](state, { mount, capabilities }) {
+    Vue.set(state.capabilities, mount, capabilities);
+  },
+
+  [types.DELETE_SECRET](state, { mount, key }) {
+    Vue.delete(state.mounts[mount], key);
+  },
 };

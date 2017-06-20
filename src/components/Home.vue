@@ -5,7 +5,7 @@
     <div v-for="mount in mounts" md-flex="60">
       <h1>
         {{ mount }}
-        <a href="#" @click="openEditDialog(mount)">
+        <a v-if="canCreateOn(mount)" href="#" @click="openEditDialog(mount)">
           <md-icon>add</md-icon>
         </a>
       </h1>
@@ -43,6 +43,7 @@ export default {
       'mounts',
       'keys',
       'auth',
+      'canCreateOn',
     ]),
   },
   methods: {
