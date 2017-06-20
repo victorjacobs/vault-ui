@@ -43,11 +43,13 @@ export const getSealStatus = async ({ commit }) => {
   }
 };
 
+// TODO be consistent in where we parse API responses, either here or mutation but not both
+
 export const getMounts = async ({ commit }) => {
   try {
     const mountsResponse = await axios.get('/sys/mounts');
 
-    commit(types.MOUNTS_SUCCESS, mountsResponse);
+    commit(types.SET_MOUNTS, mountsResponse);
   } catch (e) {
     commitApiError(commit, e);
   }
@@ -60,7 +62,7 @@ export const listMount = async ({ commit }, path) => {
       method: 'list',
     });
 
-    commit(types.SET_MOUNTS, {
+    commit(types.SET_MOUNT, {
       mount: path,
       keys: listMountResponse.data.data.keys,
     });

@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div v-for="error in errors">
-      {{ error }}
-    </div>
     <md-input-container class="input">
       <label>Username</label>
       <md-input v-model="username"></md-input>

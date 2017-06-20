@@ -4,7 +4,7 @@
       <span>Vault sealed.</span>
       <md-button class="md-accent" md-theme="light-blue" @click.native="trySealStatus()">Retry</md-button>
     </md-snackbar>
-    <div>
+    <div v-if="vaultVersion">
       Vault v{{ vaultVersion }}
     </div>
   </div>

@@ -5,7 +5,7 @@
     <div v-for="mount in mounts" md-flex="60">
       <h1>
         {{ mount }}
-        <a href="#" @click="openEditDialog()">
+        <a href="#" @click="openEditDialog(mount)">
           <md-icon>add</md-icon>
         </a>
       </h1>
@@ -21,21 +21,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import router from '@/router';
 import EditSecretDialog from '@/components/EditSecretDialog';
 
 export default {
   name: 'home',
   components: { EditSecretDialog },
-  created() {
+  async created() {
     if (!this.$store.state.auth) {
       router.push('login');
     }
 
-    // TODO werken met verschillende mounts
-    // this.$store.dispatch('getMounts');
-    this.$store.dispatch('listMount', 'secret');
+    await this.getMounts();
+    this.mounts.forEach((mountName) => {
+      this.listMount(mountName);
+    });
   },
   computed: {
     ...mapGetters([
@@ -47,6 +48,10 @@ export default {
     openEditDialog(mount, key) {
       this.$refs.editSecretDialog.open(mount, key);
     },
+    ...mapActions([
+      'getMounts',
+      'listMount',
+    ]),
   },
 };
 </script>

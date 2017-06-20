@@ -1,6 +1,6 @@
 <template>
   <md-dialog ref='dialog'>
-    <md-dialog-title>Title</md-dialog-title>
+    <md-dialog-title>{{ mount }}</md-dialog-title>
 
     <md-dialog-content>
       <md-input-container class="input">
@@ -30,6 +30,7 @@ import * as types from '@/store/mutation-types';
 
 export default {
   data: () => ({
+    createMode: false,
     mount: null,
     key: null,
     secret: {},
@@ -38,8 +39,9 @@ export default {
     async open(mount, key) {
       this.mount = mount;
       this.key = key;
+      this.createMode = !key;
 
-      if (mount !== undefined) {
+      if (key !== undefined) {
         await this.getSecretFromAPI();
       }
 
