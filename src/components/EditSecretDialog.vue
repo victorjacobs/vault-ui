@@ -45,6 +45,8 @@ export default {
       if (key !== undefined) {
         await this.getSecretFromAPI();
         this.secret = this.secretFromState(this.mount, this.key);
+      } else {
+        this.secret = {};
       }
 
       this.$refs.dialog.open();
@@ -61,6 +63,11 @@ export default {
         mount: this.mount,
         key: this.key,
       });
+
+      if (this.createMode) {
+        this.listMount({ mount: this.mount });
+      }
+
       this.close();
     },
     updateSecret(property, value) {
@@ -83,6 +90,7 @@ export default {
     ...mapActions([
       'saveSecret',
       'getSecret',
+      'listMount',
     ]),
   },
   computed: {

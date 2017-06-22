@@ -35,7 +35,7 @@ export default {
 
     await this.getMounts();
     this.mounts.forEach((mountName) => {
-      this.listMount(mountName);
+      this.listMount({ mount: mountName });
     });
   },
   computed: {

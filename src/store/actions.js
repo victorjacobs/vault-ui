@@ -80,15 +80,15 @@ export const getMounts = async ({ commit }) => {
   }
 };
 
-export const listMount = async ({ commit }, path) => {
+export const listMount = async ({ commit }, { mount }) => {
   try {
     const listMountResponse = await axios.request({
-      url: path,
+      url: mount,
       method: 'list',
     });
 
     commit(types.SET_MOUNT, {
-      mount: path,
+      mount,
       keys: listMountResponse.data.data.keys,
     });
   } catch (e) {
